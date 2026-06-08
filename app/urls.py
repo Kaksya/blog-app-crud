@@ -1,20 +1,45 @@
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
-from django.urls import path
+from django.urls import path,include
+from rest_framework import routers
+from rest_framework.routers import DefaultRouter
+from .views import RegisterViewSet,BlogViewSet,CommentViewSet,CategoryViewSet, TagViewSet
 
-from . import views
+router = DefaultRouter()
+
+router.register("register", RegisterViewSet, basename="register")
+router.register("blogs", BlogViewSet, basename="blogs")
+router.register("categories", CategoryViewSet, basename="categories")
+router.register("tags", TagViewSet, basename="tags")
 
 urlpatterns = [
-    path("register/", views.register_user),
-    path("login/", TokenObtainPairView.as_view()),
-    path("token/refresh/", TokenRefreshView.as_view()),
-    path("blogs/", views.get_blogs),
-    path("blogs/create/", views.create_blog),
-    path("blogs/<int:blog_id>/", views.get_blog_detail),
-    path("blogs/<int:blog_id>/update/", views.update_blog),
-    path("blogs/<int:blog_id>/delete/", views.delete_blog),
-    path("blogs/<int:blog_id>/comments/", views.get_comments),
-    path("blogs/<int:blog_id>/comments/create/", views.create_comment),
-    path("comments/<int:comment_id>/delete/", views.delete_comment),
-    path("categories/", views.get_categories),
-    path("tags/", views.get_tags),
+    path("", include(router.urls)),
+    path(
+        "token/",
+        TokenObtainPairView.as_view(),
+        name="token_obtain_pair",
+    ),
+    path(
+        "token/refresh/",
+        TokenRefreshView.as_view(),
+        name="token_refresh",
+    ),
+    path(
+        "blogs/<int:blog_pk>/comments/",
+        CommentViewSet.as_view(
+            {
+                "get": "list",
+                "post": "create",
+            }
+        ),
+        name="blog-comments",
+    ),
+    path(
+        "comments/<int:pk>/",
+        CommentViewSet.as_view(
+            {
+                "delete": "destroy",
+            }
+        ),
+        name="comment-delete",
+    ),
 ]
