@@ -10,7 +10,6 @@ from .models import Blog, Comment, Category, Tag
 from app.ai_utils import generate_tags_for_blog
 from django.db.models import Count, Q
 
-# Create your views here.
 
 @api_view(['POST'])
 @permission_classes([AllowAny])
