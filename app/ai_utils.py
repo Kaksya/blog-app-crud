@@ -17,8 +17,11 @@ def generate_tags_for_blog(title, content):
                     "content": f"""
 Generate 5 tags for this blog.
 
-Return only like this:
-["python", "django", "api", "backend", "blog"]
+Rules:
+- Tags must match the blog topic.
+- Do not copy any example tags.
+- Return only a JSON array of lowercase strings.
+- No explanation.
 
 Title: {title}
 Content: {content}
